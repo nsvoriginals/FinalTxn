@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
+    "test":"next dev",
     "start": "next start",
     "lint": "next lint"
   },
