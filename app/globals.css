@@ -1,26 +1,283 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@font-face {
+  font-family: 'Dotmax';
+  src: url('/dotmax-font-1761262916-0/Dotmax.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
+
+
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+ --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-dotmax);
+  
+  /* Sidebar colors */
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  
+  /* Chart colors */
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  
+  /* Base semantic colors */
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  
+  /* Radius tokens */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  
+  /* Orange/Pomegranate tints for hover states */
+  --color-primary-95: var(--primary-95);
+  --color-primary-90: var(--primary-90);
+  --color-primary-85: var(--primary-85);
+  
+  /* Black shades */
+  --color-black-95: var(--black-95);
+  --color-black-90: var(--black-90);
+  --color-black-85: var(--black-85);
+  
+  /* White shades */
+  --color-white-95: var(--white-95);
+  --color-white-90: var(--white-90);
+  --color-white-85: var(--white-85);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  --radius: 0.75rem;
+  
+  /* ============================================ */
+  /* LIGHT MODE                                   */
+  /* ============================================ */
+  
+  /* Base colors */
+  --background: oklch(100% 0 0);                   /* Pure White */
+  --foreground: oklch(0% 0 0);                     /* Pure Black */
+  
+  /* Card */
+  --card: oklch(100% 0 0);                         /* White */
+  --card-foreground: oklch(0% 0 0);                /* Black */
+  
+  /* Popover */
+  --popover: oklch(100% 0 0);                      /* White */
+  --popover-foreground: oklch(0% 0 0);             /* Black */
+  
+  /* Primary - Pomegranate Orange #ed2f13 */
+  --primary: oklch(61.23% 0.227 31.29);            /* Base Pomegranate */
+  --primary-foreground: oklch(100% 0 0);           /* White text on orange */
+  
+  /* Primary tints for hover states */
+  --primary-95: oklch(63.17% 0.215 31.29);         /* 95% - Lighter hover */
+  --primary-90: oklch(65.11% 0.204 31.29);         /* 90% - Even lighter */
+  --primary-85: oklch(67.04% 0.193 31.29);         /* 85% - Lightest */
+  
+  /* Secondary - Light neutral */
+  --secondary: oklch(96% 0 0);                     /* Light Gray */
+  --secondary-foreground: oklch(0% 0 0);           /* Black */
+  
+  /* Muted */
+  --muted: oklch(96% 0 0);                         /* Light Gray */
+  --muted-foreground: oklch(45% 0 0);              /* Medium Gray */
+  
+  /* Accent - Same as primary */
+  --accent: oklch(61.23% 0.227 31.29);             /* Pomegranate */
+  --accent-foreground: oklch(100% 0 0);            /* White */
+  
+  /* Destructive - Slightly brighter for danger */
+  --destructive: oklch(61.23% 0.227 31.29);        /* Pomegranate */
+  --destructive-foreground: oklch(100% 0 0);       /* White */
+  
+  /* Borders and inputs */
+  --border: oklch(90% 0 0);                        /* Light Gray border */
+  --input: oklch(90% 0 0);                         /* Light Gray input */
+  --ring: oklch(61.23% 0.227 31.29);               /* Pomegranate focus ring */
+  
+  /* Black shades */
+  --black-95: oklch(5% 0 0);                       /* Almost black */
+  --black-90: oklch(10% 0 0);                      /* Very dark gray */
+  --black-85: oklch(15% 0 0);                      /* Dark gray */
+  
+  /* White shades */
+  --white-95: oklch(95% 0 0);                      /* Slightly off-white */
+  --white-90: oklch(90% 0 0);                      /* Light gray */
+  --white-85: oklch(85% 0 0);                      /* Medium light gray */
+  
+  /* Chart colors - Orange variations */
+  --chart-1: oklch(61.23% 0.227 31.29);            /* Base Pomegranate */
+  --chart-2: oklch(65.11% 0.204 31.29);            /* Lighter orange */
+  --chart-3: oklch(55% 0.20 31.29);                /* Darker orange */
+  --chart-4: oklch(20% 0 0);                       /* Dark Gray */
+  --chart-5: oklch(70% 0.15 31.29);                /* Pale orange */
+  
+  /* Sidebar - Light theme */
+  --sidebar: oklch(98% 0 0);                       /* Off-White */
+  --sidebar-foreground: oklch(0% 0 0);             /* Black */
+  --sidebar-primary: oklch(61.23% 0.227 31.29);    /* Pomegranate */
+  --sidebar-primary-foreground: oklch(100% 0 0);   /* White */
+  --sidebar-accent: oklch(96% 0 0);                /* Light Gray */
+  --sidebar-accent-foreground: oklch(0% 0 0);      /* Black */
+  --sidebar-border: oklch(90% 0 0);                /* Light Gray */
+  --sidebar-ring: oklch(61.23% 0.227 31.29);       /* Pomegranate */
+}
+
+.dark {
+  /* ============================================ */
+  /* DARK MODE                                    */
+  /* ============================================ */
+  
+  /* Base colors */
+  --background: oklch(10% 0 0);                    /* Very dark - better than pure black */
+  --foreground: oklch(98% 0 0);                    /* Off-White */
+  
+  /* Card */
+  --card: oklch(15% 0 0);                          /* Dark Gray */
+  --card-foreground: oklch(98% 0 0);               /* Off-White */
+  
+  /* Popover */
+  --popover: oklch(15% 0 0);                       /* Dark Gray */
+  --popover-foreground: oklch(98% 0 0);            /* Off-White */
+  
+  /* Primary - Pomegranate Orange (same in dark mode) */
+  --primary: oklch(61.23% 0.227 31.29);            /* Base Pomegranate */
+  --primary-foreground: oklch(100% 0 0);           /* White text */
+  
+  /* Primary tints for hover states in dark mode */
+  --primary-95: oklch(63.17% 0.215 31.29);         /* 95% - Lighter hover */
+  --primary-90: oklch(65.11% 0.204 31.29);         /* 90% - Even lighter */
+  --primary-85: oklch(67.04% 0.193 31.29);         /* 85% - Lightest */
+  
+  /* Secondary */
+  --secondary: oklch(20% 0 0);                     /* Dark Gray */
+  --secondary-foreground: oklch(98% 0 0);          /* Off-White */
+  
+  /* Muted */
+  --muted: oklch(25% 0 0);                         /* Medium Dark Gray */
+  --muted-foreground: oklch(60% 0 0);              /* Medium Gray */
+  
+  /* Accent */
+  --accent: oklch(61.23% 0.227 31.29);             /* Pomegranate */
+  --accent-foreground: oklch(100% 0 0);            /* White */
+  
+  /* Destructive - Slightly brighter for dark mode */
+  --destructive: oklch(65% 0.24 31.29);            /* Brighter orange */
+  --destructive-foreground: oklch(100% 0 0);       /* White */
+  
+  /* Borders and inputs */
+  --border: oklch(25% 0 0);                        /* Dark Gray border */
+  --input: oklch(25% 0 0);                         /* Dark Gray input */
+  --ring: oklch(61.23% 0.227 31.29);               /* Pomegranate focus ring */
+  
+  /* Black shades (lighter in dark mode for contrast) */
+  --black-95: oklch(95% 0 0);                      /* Almost white in dark mode */
+  --black-90: oklch(90% 0 0);                      /* Light gray */
+  --black-85: oklch(85% 0 0);                      /* Medium light gray */
+  
+  /* White shades (darker in dark mode) */
+  --white-95: oklch(5% 0 0);                       /* Almost black in dark mode */
+  --white-90: oklch(10% 0 0);                      /* Very dark gray */
+  --white-85: oklch(15% 0 0);                      /* Dark gray */
+  
+  /* Chart colors - Orange variations for dark mode */
+  --chart-1: oklch(65% 0.24 31.29);                /* Brighter Pomegranate */
+  --chart-2: oklch(70% 0.20 31.29);                /* Light orange */
+  --chart-3: oklch(55% 0.22 31.29);                /* Medium orange */
+  --chart-4: oklch(80% 0 0);                       /* Light Gray */
+  --chart-5: oklch(50% 0.18 31.29);                /* Dark orange */
+  
+  /* Sidebar - Dark theme */
+  --sidebar: oklch(12% 0 0);                       /* Near Black */
+  --sidebar-foreground: oklch(98% 0 0);            /* Off-White */
+  --sidebar-primary: oklch(61.23% 0.227 31.29);    /* Pomegranate */
+  --sidebar-primary-foreground: oklch(100% 0 0);   /* White */
+  --sidebar-accent: oklch(20% 0 0);                /* Dark Gray */
+  --sidebar-accent-foreground: oklch(98% 0 0);     /* Off-White */
+  --sidebar-border: oklch(25% 0 0);                /* Dark Gray */
+  --sidebar-ring: oklch(61.23% 0.227 31.29);       /* Pomegranate */
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ============================================ */
+/* CUSTOM UTILITY CLASSES                       */
+/* ============================================ */
+
+/* Orange hover states using tints */
+.hover-primary {
+  @apply hover:bg-[var(--primary)] hover:text-[var(--primary-foreground)] transition-colors duration-200;
+}
+
+.hover-primary-95 {
+  @apply hover:bg-[var(--primary-95)] hover:text-[var(--primary-foreground)] transition-colors duration-200;
+}
+
+.hover-primary-90 {
+  @apply hover:bg-[var(--primary-90)] hover:text-[var(--primary-foreground)] transition-colors duration-200;
+}
+
+.hover-primary-85 {
+  @apply hover:bg-[var(--primary-85)] hover:text-[var(--primary-foreground)] transition-colors duration-200;
+}
+
+/* Animations */
+@keyframes pulse-primary {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.animate-pulse-primary {
+  animation: pulse-primary 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Gradient utilities with primary color */
+.bg-gradient-primary {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-85) 100%);
+}
+
+.bg-gradient-primary-radial {
+  background: radial-gradient(circle at top right, var(--primary) 0%, var(--primary-90) 50%, transparent 100%);
 }
