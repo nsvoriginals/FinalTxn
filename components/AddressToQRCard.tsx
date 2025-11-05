@@ -11,10 +11,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Copy, Check, Download, QrCode } from "lucide-react";
+import { Copy, Check, Download, QrCode, Wallet } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
-export function WalletQRCard() {
+interface WalletQRCardProps {
+  totalEscrowedSOL?: number;
+}
+
+export function WalletQRCard({ totalEscrowedSOL = 0 }: WalletQRCardProps) {
   const { publicKey, connected } = useWallet();
   const [copied, setCopied] = useState(false);
 
@@ -58,11 +62,10 @@ export function WalletQRCard() {
 
   if (!connected || !publicKey) {
     return (
-      <Card className="w-full max-w-md mx-auto relative overflow-hidden border-white/20 shadow-2xl backdrop-blur-xl bg-white/10 dark:bg-gray-900/10">
-        <div className="absolute inset-0 bg-gradient-to-br from-green-500/20 via-transparent to-indigo-500/20 pointer-events-none" />
-        <CardContent className="flex flex-col items-center justify-center p-12 relative z-10">
-          <QrCode className="h-16 w-16 text-gray-400 dark:text-gray-600 mb-4" />
-          <p className="text-gray-600 dark:text-gray-400 text-center">
+      <Card className="w-full shadow-lg border-2">
+        <CardContent className="flex flex-col items-center justify-center h-full min-h-[300px]">
+          <QrCode className="h-12 w-12 text-muted-foreground mb-3" />
+          <p className="text-muted-foreground text-sm text-center">
             Connect your wallet to display QR code
           </p>
         </CardContent>
@@ -71,81 +74,71 @@ export function WalletQRCard() {
   }
 
   return (
-    <Card className="w-full max-w-md mx-auto relative overflow-hidden border-white/20 shadow-2xl backdrop-blur-xl bg-white/10 dark:bg-gray-900/10">
-      {/* Glassmorphic overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-primary/10 pointer-events-none" />
-      <div className="absolute inset-0 backdrop-blur-3xl -z-10" />
-      <div className="absolute inset-[0] rounded-xl border border-white/30 pointer-events-none" />
-
-      <CardHeader className="space-y-1 relative z-10 text-center">
-        <CardTitle className="text-2xl font-bold bg-gradient-to-r from-primary to-primary bg-clip-text text-transparent drop-shadow-lg">
-          Wallet QR Code
-        </CardTitle>
-        <CardDescription className="text-gray-700 dark:text-gray-300">
-          Scan to receive SOL
-        </CardDescription>
+    <Card className="w-full shadow-lg border-2">
+      <CardHeader className="space-y-2 pb-4">
+        <CardTitle className="text-3xl font-bold">Wallet QR Code</CardTitle>
+        <CardDescription className="text-base">Scan to receive SOL</CardDescription>
       </CardHeader>
 
-      <CardContent className="space-y-6 relative z-10">
-        {/* QR Code Container */}
-        <div className="relative">
-          <div className="p-6 rounded-2xl backdrop-blur-lg bg-white/90 dark:bg-gray-900/90 border-2 border-white/40 shadow-inner mx-auto w-fit">
-            {/* QR Code with gradient background */}
-            <div className="relative p-4 rounded-xl bg-gradient-to-br from-secondary to-secondary dark:from-violet-900 dark:to-indigo-900">
-              <QRCodeSVG
-                id="wallet-qr-code"
-                value={publicKey.toBase58()}
-                size={220}
-                level="H"
-                includeMargin={false}
-                fgColor="#4c1d95" // violet-900
-                bgColor="transparent"
-                className="w-full h-auto"
-              />
+      <CardContent className="space-y-5">
+        <div className="p-4 rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 border-2 border-primary/20">
+          <div className="flex items-center gap-3">
+            <Wallet className="h-6 w-6 text-primary flex-shrink-0" />
+            <div className="flex-1 min-w-0">
+              <p className="text-sm text-muted-foreground">Total Escrowed</p>
+              <p className="text-2xl font-bold text-primary truncate">
+                {totalEscrowedSOL.toFixed(4)} SOL
+              </p>
             </div>
           </div>
-
-          {/* Corner accents */}
-          <div className="absolute top-4 left-4 w-6 h-6 border-t-2 border-l-2 border-primary rounded-tl-lg" />
-          <div className="absolute top-4 right-4 w-6 h-6 border-t-2 border-r-2 border-primary rounded-tr-lg" />
-          <div className="absolute bottom-4 left-4 w-6 h-6 border-b-2 border-l-2 border-primary rounded-bl-lg" />
-          <div className="absolute bottom-4 right-4 w-6 h-6 border-b-2 border-r-2 border-primary rounded-br-lg" />
         </div>
 
-        {/* Address Display */}
-        <div className="space-y-2">
-          <div className="flex items-center justify-center gap-2">
-            <Badge className="backdrop-blur-md bg-primary/30 text-primary dark:text-muted-foreground border-white/30">
+        <div className="flex justify-center">
+          <div className="p-4 rounded-lg bg-white dark:bg-gray-900 border-2">
+            <QRCodeSVG
+              id="wallet-qr-code"
+              value={publicKey.toBase58()}
+              size={200}
+              level="H"
+              includeMargin={false}
+              className="w-auto h-auto"
+            />
+          </div>
+        </div>
+
+        <div className="space-y-2.5">
+          <div className="flex items-center justify-center">
+            <Badge variant="secondary" className="text-sm font-semibold">
               Devnet
             </Badge>
           </div>
           
-          <div className="p-3 rounded-lg backdrop-blur-md bg-white/40 dark:bg-gray-800/40 border border-white/30">
-            <p className="text-xs text-gray-600 dark:text-gray-400 mb-1 text-center">
+          <div className="p-3 rounded-lg bg-muted border-2">
+            <p className="text-sm text-muted-foreground mb-2 text-center">
               Public Key
             </p>
-            <code className="block text-xs font-mono text-center break-all text-gray-900 dark:text-gray-100">
+            <code className="block text-xs sm:text-sm font-mono text-center break-all">
               {publicKey.toBase58()}
             </code>
           </div>
         </div>
 
-        {/* Action Buttons */}
         <div className="grid grid-cols-2 gap-3">
           <Button
             onClick={handleCopy}
             variant="outline"
-            className="backdrop-blur-md bg-white/40 dark:bg-gray-800/40 border-white/30 hover:bg-white/60 dark:hover:bg-gray-800/60 transition-all duration-200"
+            className="h-11 text-sm font-semibold border-2 rounded-lg w-full"
           >
             {copied ? (
               <>
                 <Check className="mr-2 h-4 w-4 text-green-500" />
-                Copied!
+                <span className="hidden sm:inline">Copied</span>
+                <span className="sm:hidden">OK</span>
               </>
             ) : (
               <>
                 <Copy className="mr-2 h-4 w-4" />
-                Copy
+                <span className="hidden sm:inline">Copy</span>
               </>
             )}
           </Button>
@@ -153,10 +146,10 @@ export function WalletQRCard() {
           <Button
             onClick={handleDownload}
             variant="outline"
-            className="backdrop-blur-md bg-white/40 dark:bg-gray-800/40 border-white/30 hover:bg-white/60 dark:hover:bg-gray-800/60 transition-all duration-200"
+            className="h-11 text-sm font-semibold border-2 rounded-lg w-full"
           >
             <Download className="mr-2 h-4 w-4" />
-            Download
+            <span className="hidden sm:inline">Download</span>
           </Button>
         </div>
       </CardContent>

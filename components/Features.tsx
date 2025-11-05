@@ -1,12 +1,11 @@
 "use client";
 
 import { useGSAP } from '@gsap/react';
-import { useRef, useEffect } from 'react';
+import { useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Shield, Clock, Key, Zap, Lock, Fingerprint } from 'lucide-react';
 
-// Register plugin outside component
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
@@ -15,21 +14,24 @@ export default function Features() {
   const container = useRef<HTMLDivElement>(null);
   
   useGSAP(() => {
-    // Only run on desktop
     const mm = gsap.matchMedia();
     
     mm.add("(min-width: 1024px)", () => {
-      // Pin left section
+      const rightSection = document.querySelector('.features-right') as HTMLElement;
+      
+      if (!rightSection) return;
+
+      const rightHeight = rightSection.scrollHeight;
+
       ScrollTrigger.create({
-        trigger: '.features-left',
+        trigger: '.features-container',
         start: 'top top',
-        end: () => `+=${document.querySelector('.features-right')?.scrollHeight}`,
-        pin: true,
+        end: () => `+=${rightHeight}`,
+        pin: '.features-left',
         pinSpacing: false,
       });
 
-      // Animate cards
-      gsap.utils.toArray('.feature-card').forEach((card: any, index) => {
+      gsap.utils.toArray<HTMLElement>('.feature-card').forEach((card) => {
         gsap.fromTo(card, 
           {
             opacity: 0,
@@ -48,6 +50,8 @@ export default function Features() {
           }
         );
       });
+
+      ScrollTrigger.refresh();
     });
 
     return () => mm.revert();
@@ -88,11 +92,9 @@ export default function Features() {
 
   return (
     <div ref={container} className="relative">
-      {/* Desktop Layout */}
       <div className="hidden lg:block">
-        <div className="flex">
-          {/* Left - Pinned Section */}
-          <div className="features-left w-[40vw] h-screen flex items-center">
+        <div className="features-container flex">
+          <div className="features-left w-[40vw] h-screen flex items-center relative z-50">
             <div className="p-8 lg:p-16">
               <h2 className="font-display text-[120px] xl:text-[180px] font-bold mb-8 leading-[0.9]">
                 Features
@@ -105,16 +107,13 @@ export default function Features() {
             </div>
           </div>
 
-          {/* Right - Scrollable Cards */}
-          <div className="features-right w-[60vw] pl-48" >
+          <div className="features-right w-[60vw] pl-48">
             <div className="py-24 px-8 lg:px-16 space-y-[100vh]">
               {features.map((feature, index) => (
                 <div key={index} className="feature-card h-screen flex items-center">
                   <div className="relative w-full max-w-2xl">
-                    {/* Background gradient */}
                     <div className="absolute -top-4 -left-4 w-full h-full bg-gradient-to-br from-primary/20 to-primary/5 rounded-3xl blur-xl" />
                     
-                    {/* Card */}
                     <div className="relative bg-card border-2 border-foreground rounded-3xl p-10 hover:border-primary transition-all duration-300">
                       <feature.icon className="h-14 w-14 text-primary mb-6" />
                       
@@ -134,7 +133,6 @@ export default function Features() {
         </div>
       </div>
 
-      {/* Mobile/Tablet Layout */}
       <div className="lg:hidden px-6 py-24 space-y-16">
         <div className="text-center">
           <h2 className="font-display text-6xl md:text-8xl font-bold mb-6">

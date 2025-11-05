@@ -23,8 +23,8 @@ const dotmax = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Solana Escrow",
-  description: "Solana escrow application",
+  title: "LastTxn",
+  description: "Inheritance system on solana",
 };
 
 export default function RootLayout({
@@ -40,6 +40,8 @@ export default function RootLayout({
             {children}
           </ThemeProvider>
         </SolanaProvider>
+       
+              
       </body>
     </html>
   );
